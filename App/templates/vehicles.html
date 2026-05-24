@@ -1,0 +1,231 @@
+{% extends 'index.html' %}
+{% block body %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Service Center - Vehicles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+    <!-- Vehicles List Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Registered Vehicles</h2>
+                <div class="d-flex">
+                    <div class="input-group me-2">
+                        <input type="text" class="form-control" id="searchVehicle" placeholder="Search vehicles...">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-funnel me-1"></i>Filter
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                            <li><a class="dropdown-item" href="#">All Vehicles</a></li>
+                            <li><a class="dropdown-item" href="#">Recently Added</a></li>
+                            <li><a class="dropdown-item" href="#">Due for Service</a></li>
+                            <li><a class="dropdown-item" href="#">Battery Health Below 80%</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="vehiclesList">
+                <!-- Vehicle Cards will be dynamically generated here -->
+                <!-- Sample Vehicle Card 1 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 vehicle-card" onclick="location.href='vehicle-details.html?id=1'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Tesla Model 3</h5>
+                                <span class="badge bg-success">Good</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">KA-01-AB-1234</h6>
+                            <div class="vehicle-info">
+                                <p><i class="bi bi-person me-2"></i>John Doe</p>
+                                <p><i class="bi bi-battery-full me-2"></i>Battery: 82 kWh (90%)</p>
+                                <p><i class="bi bi-speedometer2 me-2"></i>Odometer: 15,000 km</p>
+                                <p><i class="bi bi-calendar-check me-2"></i>Last Service: 01/05/2023</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary w-100">
+                            <a href="{% url 'vehicle-detail' %}" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">View Details</a>
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- Sample Vehicle Card 2 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 vehicle-card" onclick="location.href='vehicle-details.html?id=2'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Nissan Leaf</h5>
+                                <span class="badge bg-warning">Attention</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">KA-02-CD-5678</h6>
+                            <div class="vehicle-info">
+                                <p><i class="bi bi-person me-2"></i>Jane Smith</p>
+                                <p><i class="bi bi-battery-half me-2"></i>Battery: 40 kWh (75%)</p>
+                                <p><i class="bi bi-speedometer2 me-2"></i>Odometer: 32,500 km</p>
+                                <p><i class="bi bi-calendar-check me-2"></i>Last Service: 15/02/2023</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary w-100">
+                            <a href="{% url 'vehicle-detail' %}" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">View Details</a>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sample Vehicle Card 3 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 vehicle-card" onclick="location.href='vehicle-details.html?id=3'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Hyundai Kona Electric</h5>
+                                <span class="badge bg-success">Good</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">KA-03-EF-9012</h6>
+                            <div class="vehicle-info">
+                                <p><i class="bi bi-person me-2"></i>Robert Johnson</p>
+                                <p><i class="bi bi-battery-full me-2"></i>Battery: 64 kWh (88%)</p>
+                                <p><i class="bi bi-speedometer2 me-2"></i>Odometer: 8,200 km</p>
+                                <p><i class="bi bi-calendar-check me-2"></i>Last Service: 20/06/2023</p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <button class="btn btn-sm btn-outline-primary w-100">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Vehicle Card 4 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 vehicle-card" onclick="location.href='vehicle-details.html?id=4'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Audi e-tron</h5>
+                                <span class="badge bg-danger">Service Due</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">KA-04-GH-3456</h6>
+                            <div class="vehicle-info">
+                                <p><i class="bi bi-person me-2"></i>Michael Brown</p>
+                                <p><i class="bi bi-battery-half me-2"></i>Battery: 95 kWh (82%)</p>
+                                <p><i class="bi bi-speedometer2 me-2"></i>Odometer: 28,700 km</p>
+                                <p><i class="bi bi-calendar-check me-2"></i>Last Service: 10/01/2023</p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <button class="btn btn-sm btn-outline-primary w-100">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Vehicle Card 5 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 vehicle-card" onclick="location.href='vehicle-details.html?id=5'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Kia EV6</h5>
+                                <span class="badge bg-success">Good</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">KA-05-IJ-7890</h6>
+                            <div class="vehicle-info">
+                                <p><i class="bi bi-person me-2"></i>Sarah Wilson</p>
+                                <p><i class="bi bi-battery-full me-2"></i>Battery: 77.4 kWh (92%)</p>
+                                <p><i class="bi bi-speedometer2 me-2"></i>Odometer: 5,600 km</p>
+                                <p><i class="bi bi-calendar-check me-2"></i>Last Service: 05/07/2023</p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <button class="btn btn-sm btn-outline-primary w-100">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Vehicle Card 6 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 vehicle-card" onclick="location.href='vehicle-details.html?id=6'">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">MG ZS EV</h5>
+                                <span class="badge bg-warning">Attention</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">KA-06-KL-1234</h6>
+                            <div class="vehicle-info">
+                                <p><i class="bi bi-person me-2"></i>David Miller</p>
+                                <p><i class="bi bi-battery-half me-2"></i>Battery: 50.3 kWh (78%)</p>
+                                <p><i class="bi bi-speedometer2 me-2"></i>Odometer: 18,900 km</p>
+                                <p><i class="bi bi-calendar-check me-2"></i>Last Service: 12/04/2023</p>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <button class="btn btn-sm btn-outline-primary w-100">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Vehicles pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-battery-charging me-2"></i>EV Service Center</h5>
+                    <p>Professional electric vehicle service and maintenance.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="vehicles.html" class="text-white">Vehicles</a></li>
+                        <li><a href="index.html#register" class="text-white">Register</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt me-2"></i>123 EV Street, Electric City</li>
+                        <li><i class="bi bi-telephone me-2"></i>(123) 456-7890</li>
+                        <li><i class="bi bi-envelope me-2"></i>info@evservice.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 EV Service Center. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
+{% endblock %}

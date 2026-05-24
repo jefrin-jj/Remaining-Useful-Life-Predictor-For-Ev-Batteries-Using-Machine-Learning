@@ -1,0 +1,158 @@
+{% extends 'index.html' %}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nearby Gas Stations (Free Version)</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <style>
+        #map {
+            height: 100vh;
+        }
+        /* Optional: Style for popup button */
+        .popup-button {
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .popup-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align: center;">Nearby Gas Stations (OpenStreetMap)</h2>
+<div id="map"></div>
+
+<!-- Container to show route details -->
+<div id="route-info" style="padding: 10px; font-weight: bold; text-align: center;"></div>
+
+<script>
+    const map = L.map('map').fitWorld();
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+    }).addTo(map);
+
+    let userLocation = null;
+    let routingControl = null;
+
+    function onLocationFound(e) {
+        userLocation = e.latlng;
+
+        L.marker(userLocation).addTo(map)
+            .bindPopup("You are here").openPopup();
+
+        const radius = 2000; // in meters
+        const query = `[out:json];
+            node["amenity"="fuel"](around:${radius},${e.latitude},${e.longitude});
+            out;`;
+
+        fetch('https://overpass-api.de/api/interpreter', {
+            method: 'POST',
+            body: query
+        })
+        .then(res => res.json())
+        .then(data => {
+            data.elements.forEach(station => {
+                if (station.lat && station.lon) {
+                    const isBusy = Math.random() < 0.5;
+                    const popupContent = `
+                        <b>${station.tags.name || 'Gas Station'}</b><br>
+                        Status: <b style="color:${isBusy ? 'red' : 'green'}">${isBusy ? 'Busy' : 'Available'}</b><br>
+                        <button class="popup-button" onclick="routeToStation(${station.lat}, ${station.lon})">Get Route</button>
+                    `;
+
+                    L.marker([station.lat, station.lon]).addTo(map)
+                        .bindPopup(popupContent);
+                }
+            });
+        });
+    }
+
+    function routeToStation(lat, lon) {
+        if (!userLocation) {
+            alert("User location not found yet.");
+            return;
+        }
+
+        // Remove existing route and clear route info if present
+        if (routingControl) {
+            map.removeControl(routingControl);
+            document.getElementById('route-info').innerHTML = '';
+        }
+
+        routingControl = L.Routing.control({
+            waypoints: [
+                userLocation,
+                L.latLng(lat, lon)
+            ],
+            routeWhileDragging: false,
+            showAlternatives: true,
+            lineOptions: {
+                styles: [{color: 'blue', opacity: 0.6, weight: 4}]
+            },
+            createMarker: function(i, waypoint, n) {
+                if (i === 0) {
+                    return L.marker(waypoint.latLng, {icon: L.icon({
+                        iconUrl: 'https://cdn-icons-png.flaticon.com/512/64/64113.png',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 30]
+                    })}).bindPopup("Your Location");
+                } else if (i === n - 1) {
+                    return L.marker(waypoint.latLng, {icon: L.icon({
+                        iconUrl: 'https://cdn-icons-png.flaticon.com/512/484/484167.png',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 30]
+                    })}).bindPopup("Gas Station");
+                } else {
+                    return L.marker(waypoint.latLng);
+                }
+            }
+        }).addTo(map);
+
+        // Listen for route found event
+        routingControl.on('routesfound', function(e) {
+            const routes = e.routes;
+            if (routes && routes.length > 0) {
+                const summary = routes[0].summary;
+                const distanceKm = (summary.totalDistance / 1000).toFixed(2); // meters to km
+                const timeMin = Math.ceil(summary.totalTime / 60); // seconds to minutes
+
+                document.getElementById('route-info').innerHTML =
+                    `Distance: <b>${distanceKm} km</b> | Estimated time: <b>${timeMin} min</b>`;
+            }
+        });
+    }
+
+    function onLocationError(e) {
+        alert(e.message);
+    }
+
+    map.on('locationfound', onLocationFound);
+    map.on('locationerror', onLocationError);
+
+    map.locate({setView: true, maxZoom: 15});
+</script>
+
+</body>
+
+</html>
+{% endblock %}

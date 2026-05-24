@@ -1,0 +1,551 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Service Center - Vehicle Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-battery-charging me-2"></i>EV Service Center
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="vehicles.html">Vehicles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'vehicle-detail' %}">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Vehicle Details Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="mb-4">
+                <a href="{% url 'home' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Vehicles
+                </a>
+            </div>
+
+            <div class="row">
+                <!-- Vehicle Summary Card -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card shadow h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Vehicle Summary</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <div class="vehicle-icon mb-3">
+                                    <i class="bi bi-car-front-fill display-1 text-primary"></i>
+                                </div>
+                                <h3 id="vehicleName">Tesla Model 3</h3>
+                                <h5 id="vehicleNumber" class="text-muted">KA-01-AB-1234</h5>
+                                <span id="vehicleStatus" class="badge bg-success fs-6 mt-2">Good Condition</span>
+                            </div>
+                            <hr>
+                            <div class="vehicle-summary-info">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Owner:</span>
+                                    <span id="ownerName" class="fw-bold">John Doe</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Contact:</span>
+                                    <span id="contactNumber" class="fw-bold">+91 9876543210</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Battery Health:</span>
+                                    <span id="batteryHealth" class="fw-bold">90%</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Last Service:</span>
+                                    <span id="lastService" class="fw-bold">01/05/2023</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Odometer:</span>
+                                    <span id="odometer" class="fw-bold">15,000 km</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Purchase Date:</span>
+                                    <span id="purchaseDate" class="fw-bold">10/01/2022</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="d-grid gap-2">
+                              <a href="{% url 'predict_battery_life' %}" class="btn btn-primary" id="predictBatteryBtn">
+    <i class="bi bi-lightning-charge me-2"></i>Predict Battery Life
+</a>
+
+                                <button class="btn btn-outline-primary">
+                                    <i class="bi bi-printer me-2"></i>Print Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Details Tabs -->
+                <div class="col-lg-8">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" id="vehicleDetailsTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="technical-tab" data-bs-toggle="tab"
+                                        data-bs-target="#technical" type="button" role="tab" aria-controls="technical"
+                                        aria-selected="true">Technical Details</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="service-tab" data-bs-toggle="tab"
+                                        data-bs-target="#service" type="button" role="tab" aria-controls="service"
+                                        aria-selected="false">Service History</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="battery-tab" data-bs-toggle="tab"
+                                        data-bs-target="#battery" type="button" role="tab" aria-controls="battery"
+                                        aria-selected="false">Battery Analysis</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="vehicleDetailsTabsContent">
+                                <!-- Technical Details Tab -->
+                                <div class="tab-pane fade show active" id="technical" role="tabpanel"
+                                    aria-labelledby="technical-tab">
+                                    <h4 class="mb-4">Vehicle Specifications</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="text-primary">General Information</h5>
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">Make</th>
+                                                        <td id="make">Tesla</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Model</th>
+                                                        <td id="model">Model 3</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Year</th>
+                                                        <td id="year">2022</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">VIN</th>
+                                                        <td id="vin">5YJ3E1EA1MF123456</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Color</th>
+                                                        <td id="color">Pearl White</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-primary">Battery & Motor</h5>
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">Battery Type</th>
+                                                        <td id="batteryType">Lithium-ion</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Battery Capacity</th>
+                                                        <td id="batteryCapacity">82 kWh</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Range</th>
+                                                        <td id="range">560 km</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Motor Type</th>
+                                                        <td id="motorType">PMSM</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Motor Power</th>
+                                                        <td id="motorPower">239 kW</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <h5 class="text-primary">Charging Information</h5>
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">Charging Type</th>
+                                                        <td id="chargingType">Both AC & DC</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Max Charging Rate</th>
+                                                        <td id="maxChargingRate">250 kW</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Charging Port</th>
+                                                        <td id="chargingPort">Tesla Proprietary</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-primary">Software & Firmware</h5>
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">Software Version</th>
+                                                        <td id="softwareVersion">2023.26.10</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Last Update</th>
+                                                        <td id="lastUpdate">15/07/2023</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Features</th>
+                                                        <td id="features">Autopilot, Sentry Mode</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Service History Tab -->
+                                <div class="tab-pane fade" id="service" role="tabpanel" aria-labelledby="service-tab">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h4 class="mb-0">Service History</h4>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-plus-circle me-2"></i>Add Service Record
+                                        </button>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Service Type</th>
+                                                    <th scope="col">Odometer</th>
+                                                    <th scope="col">Description</th>
+                                                    <th scope="col">Technician</th>
+                                                    <th scope="col">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>01/05/2023</td>
+                                                    <td>Regular Maintenance</td>
+                                                    <td>15,000 km</td>
+                                                    <td>Battery check, tire rotation, software update</td>
+                                                    <td>Alex Johnson</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary me-1">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-secondary">
+                                                            <i class="bi bi-printer"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>15/01/2023</td>
+                                                    <td>Battery Diagnostics</td>
+                                                    <td>10,200 km</td>
+                                                    <td>Full battery health check and cell balancing</td>
+                                                    <td>Sarah Williams</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary me-1">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-secondary">
+                                                            <i class="bi bi-printer"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>20/10/2022</td>
+                                                    <td>Software Update</td>
+                                                    <td>7,500 km</td>
+                                                    <td>Major software update and system calibration</td>
+                                                    <td>Mike Chen</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary me-1">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-secondary">
+                                                            <i class="bi bi-printer"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>05/07/2022</td>
+                                                    <td>Initial Service</td>
+                                                    <td>1,200 km</td>
+                                                    <td>First service check-up and inspection</td>
+                                                    <td>David Rodriguez</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary me-1">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-secondary">
+                                                            <i class="bi bi-printer"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Battery Analysis Tab -->
+                                <div class="tab-pane fade" id="battery" role="tabpanel" aria-labelledby="battery-tab">
+                                    <h4 class="mb-4">Battery Health Analysis</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Current Battery Status</h5>
+                                                    <div class="text-center my-4">
+                                                        <div class="battery-health-gauge">
+                                                            <div class="progress" style="height: 30px;">
+                                                                <div class="progress-bar bg-success" role="progressbar"
+                                                                    style="width: 90%;" aria-valuenow="90"
+                                                                    aria-valuemin="0" aria-valuemax="100">90%</div>
+                                                            </div>
+                                                        </div>
+                                                        <p class="mt-3 mb-0">Battery Health: <strong>Excellent</strong>
+                                                        </p>
+                                                    </div>
+                                                    <table class="table table-sm">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Original Capacity:</th>
+                                                                <td>82 kWh</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Current Capacity:</th>
+                                                                <td>73.8 kWh</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Degradation Rate:</th>
+                                                                <td>2.5% per year</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Charge Cycles:</th>
+                                                                <td>120</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Battery Life Prediction</h5>
+                                                    <div id="batteryPredictionResult" class="d-none">
+                                                        <div class="text-center my-4">
+                                                            <div class="battery-prediction-chart">
+                                                                <canvas id="batteryPredictionChart"
+                                                                    height="200"></canvas>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-sm">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th>Estimated Lifespan:</th>
+                                                                    <td>8-10 years</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Replacement Recommended:</th>
+                                                                    <td>After 2030</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>80% Capacity Reached:</th>
+                                                                    <td>Approximately 2027</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div id="batteryPredictionPrompt" class="text-center py-5">
+                                                        <p class="mb-4">Click the "Predict Battery Life" button to
+                                                            analyze battery health and predict future performance.</p>
+                                                        <button class="btn btn-primary" id="predictBatteryBtnInTab">
+                                                            <i class="bi bi-lightning-charge me-2"></i>Predict Battery
+                                                            Life
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Recommendations</h5>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item d-flex">
+                                                            <i
+                                                                class="bi bi-check-circle-fill text-success me-3 fs-4"></i>
+                                                            <div>
+                                                                <h6 class="mb-1">Optimal Charging</h6>
+                                                                <p class="mb-0">Keep the battery charge between 20% and
+                                                                    80% for daily use to maximize battery life.</p>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item d-flex">
+                                                            <i
+                                                                class="bi bi-check-circle-fill text-success me-3 fs-4"></i>
+                                                            <div>
+                                                                <h6 class="mb-1">Temperature Management</h6>
+                                                                <p class="mb-0">Avoid extreme temperatures when
+                                                                    possible. Use climate pre-conditioning when
+                                                                    connected to power.</p>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item d-flex">
+                                                            <i
+                                                                class="bi bi-check-circle-fill text-success me-3 fs-4"></i>
+                                                            <div>
+                                                                <h6 class="mb-1">Regular Software Updates</h6>
+                                                                <p class="mb-0">Keep the vehicle software updated to
+                                                                    benefit from the latest battery management
+                                                                    improvements.</p>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Battery Prediction Modal 
+    <div class="modal fade" id="batteryPredictionModal" tabindex="-1" aria-labelledby="batteryPredictionModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="batteryPredictionModalLabel">Battery Life Prediction</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="spinner-border text-primary" role="status" id="predictionSpinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3" id="predictionStatus">Analyzing battery data...</p>
+                    </div>
+                    <div id="predictionResults" class="d-none">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Current Battery Health</h5>
+                                        <div class="display-1 text-success mb-3">90%</div>
+                                        <p class="card-text">Your battery is in excellent condition</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Estimated Remaining Life</h5>
+                                        <div class="display-1 text-primary mb-3">8+ yrs</div>
+                                        <p class="card-text">Based on your usage patterns</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Degradation Projection</h5>
+                                <canvas id="degradationChart" height="200"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Recommendations</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Maintain charging between 20-80% for daily use</li>
+                                    <li class="list-group-item">Avoid frequent DC fast charging when possible</li>
+                                    <li class="list-group-item">Schedule your next battery health check in 6 months</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="downloadReportBtn" disabled>Download
+                        Report</button>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-battery-charging me-2"></i>EV Service Center</h5>
+                    <p>Professional electric vehicle service and maintenance.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="vehicles.html" class="text-white">Vehicles</a></li>
+                        <li><a href="index.html#register" class="text-white">Register</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt me-2"></i>123 EV Street, Electric City</li>
+                        <li><i class="bi bi-telephone me-2"></i>(123) 456-7890</li>
+                        <li><i class="bi bi-envelope me-2"></i>info@evservice.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 EV Service Center. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+
+</html>
